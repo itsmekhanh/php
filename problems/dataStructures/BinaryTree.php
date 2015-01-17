@@ -13,7 +13,7 @@ class BinaryTreeNode{
 }
 
 class BinaryTree{
-    private $root;
+    protected $root;
 
     public function __construct(){
         $root = null;
@@ -51,6 +51,45 @@ class BinaryTree{
             }
         }
         return false;
+    }
+
+    public function remove($data){
+        $queue = new Queue();
+        $queue->enqueue($this->root);
+
+        while(!$queue->isEmpty()){
+            $node = $queue->dequeue();
+
+            if($node->data == $data){
+                // now find node to replace
+                if(isset($node->right)){
+                    $replace = $node->right;
+                    while($replace->left != null){
+                        $prev = $replace;
+                        $replace = $replace->left;
+                    }
+
+                    $node->data = $replace->data;
+
+                    // there was a left node
+                    if(isset($prev)){
+                        $prev->left = $replace->right;
+
+                    }else{
+                        // there was no left node
+                        $node->right = $replace->right;
+                    }
+                }
+            }
+
+            if(isset($node->left)){
+                $queue->enqueue($node->left);
+            }
+            if(isset($node->right)){
+                $queue->enqueue($node->right);
+            }
+        }
+
     }
 
     public function printInorder($node = null){
@@ -140,5 +179,48 @@ class BinaryTree{
         foreach($A as $a){
             $this->insert($a);
         }
+    }
+}
+
+class BinarySearchTree extends BinaryTree{
+
+    public function insert($data){
+        $node = new BinaryTreeNode($data);
+
+        if($this->root == null){
+            $this->root = $node;
+            return true;
+        }
+        else{
+            $w = $this->root;
+            while($w != null){
+                if($data < $w->data){
+                    if(isset($w->left)){
+                        $w = $w->left;
+                    }else{
+                        $w->left = $node;
+                        return true;
+                    }
+                }else{
+                    if(isset($w->right)){
+                        $w = $w->right;
+                    }else{
+                        $w->right = $node;
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public function isBST($node, $max=PHP_INT_MAX, $min = -1){
+        if($node == null){
+            $node = $this->root;
+        }
+
+        if($node->data > $max || $node->data < $min) return false;
+
+
     }
 }
