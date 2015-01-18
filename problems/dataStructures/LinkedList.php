@@ -41,7 +41,51 @@ class DoublyLinkedList{
             $w->next = $node;
             $node->prev = $w;
         }
-        $this->count++;
+    }
+
+    public function remove($data){
+        $w = $this->head;
+
+        while($w != null){
+            if($w->data == $data){
+                if(isset($w->prev)){
+                    $w->prev->next = $w->next;
+                }
+                else{
+                    $this->head = null;
+                }
+            }
+            $w = $w->next;
+        }
+    }
+
+    public function createListFromArray($values){
+        foreach($values as $value){
+            $this->append($value);
+        }
+    }
+
+    public function printList(){
+        $w = $this->head;
+
+        while($w != null){
+            echo "[$w->data]";
+            $w = $w->next;
+        }
+    }
+
+    public function reverse(){
+        $w = $this->head;
+        $prev = null;
+
+        while($w != null){
+            $next = $w->next;
+            $w->next = $prev;
+            $w->prev = $next;
+            $prev = $w;
+            $w = $next;
+        }
+        $this->head = $prev;
     }
 }
 
