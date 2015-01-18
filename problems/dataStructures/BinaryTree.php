@@ -175,6 +175,25 @@ class BinaryTree{
         return $heights;
     }
 
+    public function isBST($node=null, $max=PHP_INT_MAX, $min = -1){
+        if($node == null){
+            $node = $this->root;
+        }
+
+        if($node->data > $max || $node->data < $min) return false;
+
+        $left = true; $right = true;
+
+        if($node->left != null){
+            $left = $this->isBST($node->left, $node->data, $min);
+        }
+        if($node->right != null){
+            $right = $this->isBST($node->right, $max, $node->data);
+        }
+
+        return $left && $right;
+    }
+
     public function createTreeFromArray($A){
         foreach($A as $a){
             $this->insert($a);
@@ -212,15 +231,5 @@ class BinarySearchTree extends BinaryTree{
             }
         }
         return false;
-    }
-
-    public function isBST($node, $max=PHP_INT_MAX, $min = -1){
-        if($node == null){
-            $node = $this->root;
-        }
-
-        if($node->data > $max || $node->data < $min) return false;
-
-
     }
 }

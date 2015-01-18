@@ -46,3 +46,39 @@ class Queue{
         return $this->count == 0;
     }
 }
+
+class QueueStacks{
+    private $count;
+    private $main;
+    private $temp;
+
+    public function __construct(){
+        $this->count = 0;
+        $main = new Stack();
+        $temp = new Stack();
+    }
+
+    public function queue($data){
+        while(!$this->main->isEmpty()){
+            $this->temp->push($this->main->pop());
+        }
+        $this->main->push($data);
+
+        while(!$this->temp->isEmpty()){
+            $this->main->push($this->temp->pop());
+        }
+    }
+
+    public function pop(){
+        $data = $this->main->pop();
+        return $data;
+    }
+
+    public function top(){
+        return $this->main->top();
+    }
+
+    public function isEmpty(){
+        return $this->main->isEmpty();
+    }
+}
