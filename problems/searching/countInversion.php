@@ -5,24 +5,39 @@
      * before 1 and 2
      * */
 
+require_once "../sorting/quicksort.php";
+
 function countInversion($values, $start, $end){
 
     if($start <= $end){
-        return [$values[$start]];
+        return 0;
     }
     else{
         $mid = floor(($start+$end)/2);
-        $right = countInversion($values, $start, $mid);
-        $left = countInversion($values, $mid+1, $end);
+        $x = countInversion($values, $start, $mid);
+        $y = countInversion($values, $mid+1, $end);
 
-        $r = 0;
-        $l = 0;
+        $left = array_slice($values, 0, $mid);
+        $right = array_slice($values, $mid);
 
+        $leftCount = $mid;
 
+        quicksort($left, 0, count($left)-1);
+        quicksort($right, 0, count($right)-1);
 
-        while(true){
+        $l = 0; $r = 0;
+        $count = 0;
 
+        while(isset($left[$l]) && isset($right[$r])){
+            if($right[$r] < $left[$l]){
+                $count += $leftCount - $l;
+                $r++;
+            }else{
+                $l++;
+            }
         }
+        return $count+$x+$y;
+
     }
  
 }
